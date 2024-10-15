@@ -148,4 +148,32 @@ When selecting a storage solution, consider the data type and business requireme
 
 - **For unstructured data** such as media files or backups, **Google Cloud Storage**, **AWS S3**, and **Azure Blob Storage** provide scalable, secure storage with varying classes or tiers suited to different access patterns.
 
-Each cloud provider offers a spectrum of services that can fit diverse application needs, and the choice often depends on specific application requirements, cost considerations, and integration needs within an existing cloud ecosystem. By understanding the various processing and storage options, you can make an informed decision that best meets your data and computational demands.
+```mermaid
+graph TD
+    A[Data Type] --> B[Structured]
+    A --> C[Unstructured]
+    
+    B --> D[Transactional]
+    B --> E[Analytical]
+    
+    D --> F[SQL]
+    D --> G[NoSQL]
+    
+    E --> H[SQL]
+    E --> I[NoSQL]
+    
+    F --> J[Regional Scale]
+    F --> K[Global Scale]
+    
+    J --> L[Cloud SQL / Amazon RDS / Azure SQL DB]
+    K --> M[Cloud Spanner / AWS Aurora Global]
+    
+    G --> N[Firestore / DynamoDB / Azure Cosmos DB]
+    
+    H --> O[BigQuery / Redshift / Azure Synapse]
+    I --> P[Bigtable / DynamoDB / Cosmos DB]
+    
+    C --> Q[Object Storage]
+    
+    Q --> R[Cloud Storage / S3 / Blob Storage]
+```
