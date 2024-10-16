@@ -152,29 +152,29 @@ When selecting a storage solution, consider the data type and business requireme
 graph TD
     A[Data Type] --> B[Structured]
     A --> C[Unstructured]
-    
+
     B --> D[Transactional]
     B --> E[Analytical]
-    
+
     D --> F[SQL]
     D --> G[NoSQL]
-    
+
     E --> H[SQL]
     E --> I[NoSQL]
-    
+
     F --> J[Regional Scale]
     F --> K[Global Scale]
-    
+
     J --> L[Cloud SQL / Amazon RDS / Azure SQL DB]
     K --> M[Cloud Spanner / AWS Aurora Global]
-    
+
     G --> N[Firestore / DynamoDB / Azure Cosmos DB]
-    
+
     H --> O[BigQuery / Redshift / Azure Synapse]
     I --> P[Bigtable / DynamoDB / Cosmos DB]
-    
+
     C --> Q[Object Storage]
-    
+
     Q --> R[Cloud Storage / S3 / Blob Storage]
 ```
 
@@ -275,7 +275,8 @@ To clarify the distinction between supervised and unsupervised learning, conside
 
 ## Test Your Knowledge
 
-1. You are working at a bank and want to predict whether a customer will default on their loan based on their financial history and credit score. 
+1. You are working at a bank and want to predict whether a customer will default on their loan based on their financial history and credit score.
+
    - What category of learning is this?
      <details>
        <summary>Answer</summary>
@@ -288,6 +289,7 @@ To clarify the distinction between supervised and unsupervised learning, conside
      </details>
 
 2. Imagine you own a retail store and want to group customers based on their purchasing behavior to understand different customer segments.
+
    - What category of learning is this?
      <details>
        <summary>Answer</summary>
@@ -300,6 +302,7 @@ To clarify the distinction between supervised and unsupervised learning, conside
      </details>
 
 3. You are an engineer at an energy company and need to forecast energy consumption for the upcoming month based on historical data.
+
    - What category of learning is this?
      <details>
        <summary>Answer</summary>
@@ -312,6 +315,7 @@ To clarify the distinction between supervised and unsupervised learning, conside
      </details>
 
 4. You work for a supermarket and want to discover which products are frequently bought together to optimize product placement.
+
    - What category of learning is this?
      <details>
        <summary>Answer</summary>
@@ -334,3 +338,204 @@ To clarify the distinction between supervised and unsupervised learning, conside
        <summary>Answer</summary>
        Dimensionality Reduction, such as **Principal Component Analysis (PCA)**
      </details>
+
+## Training a Logistic Regression Model on Google Merchandise Shop Data using BigQuery ML
+
+In this section, we build and evaluate a logistic regression model using Google Merchandise Shop data. We'll explore how to prepare the data, train the model, evaluate its performance, and make predictions. Along the way, we'll delve into key concepts and terms that are essential for understanding machine learning models in a BigQuery ML environment.
+
+### 1. Introduction to the Dataset
+
+The Google Merchandise Shop dataset is a publicly available dataset that contains Google Analytics sample data. It includes information about user interactions with the online store, such as page views, transactions, device information, and geographic data.
+
+Our goal is to predict whether a user session will lead to a transaction (purchase) based on features like operating system, device type, country, and page views.
+
+### 2. Data Preparation
+
+Before training the model, we need to prepare the data by selecting relevant features and formatting it appropriately.
+
+#### 2.1 Extracting Relevant Features
+
+We use the following SQL query to extract the necessary features from the dataset:
+
+```sql
+SELECT
+  IF(totals.transactions IS NULL, 0, 1) AS label,
+  IFNULL(device.operatingSystem, "") AS os,
+  device.isMobile AS is_mobile,
+  IFNULL(geoNetwork.country, "") AS country,
+  IFNULL(totals.pageviews, 0) AS pageviews
+FROM
+  `bigquery-public-data.google_analytics_sample.ga_sessions_*`
+WHERE
+  _TABLE_SUFFIX BETWEEN '20160801' AND '20170631'
+LIMIT 10000;
+```
+
+**Explanation of the Query:**
+
+- **IF(totals.transactions IS NULL, 0, 1) AS label**: Creates a binary label where sessions with transactions are marked as `1` (positive class) and those without are `0` (negative class).
+- **IFNULL(device.operatingSystem, "") AS os**: Retrieves the operating system used during the session, replacing `NULL` values with an empty string.
+- **device.isMobile AS is_mobile**: A boolean indicating if the device used is mobile.
+- **IFNULL(geoNetwork.country, "") AS country**: Retrieves the country from which the session originated, replacing `NULL` values with an empty string.
+- **IFNULL(totals.pageviews, 0) AS pageviews**: Number of pages viewed during the session, with `NULL` values replaced by `0`.
+
+We save the result of this query as `training_data`.
+
+![Training Data Sample](static/training-data.png)
+
+### 3. Training the Logistic Regression Model
+
+With our data prepared, we proceed to train a logistic regression model using BigQuery ML.
+
+#### 3.1 Creating the Model
+
+We use the following SQL command to create and train the model:
+
+```sql
+CREATE OR REPLACE MODEL `bqml.sample_model`
+OPTIONS(model_type='logistic_reg') AS
+SELECT * FROM `bqml.training_data`;
+```
+
+**Explanation of the Command:**
+
+- **CREATE OR REPLACE MODEL `bqml.sample_model`**: Creates a new model or replaces an existing one named `sample_model` in the `bqml` dataset.
+- **OPTIONS(model_type='logistic_reg')**: Specifies that the model type is logistic regression.
+- **AS SELECT \* FROM `bqml.training_data`**: Uses all columns from `training_data` as input features for training.
+
+#### 3.2 Understanding the Training Output
+
+After running the command, BigQuery ML provides a training output that includes several key metrics:
+
+![Model Training Output](static/sample-model-training.png)
+
+**Key Terms Explained:**
+
+- **Iteration**: Represents each pass through the training data during the optimization process.
+- **Training Data Loss**: Measures how well the model fits the training data; lower values indicate a better fit.
+- **Evaluation Data Loss**: Measures the model's performance on a separate evaluation dataset.
+- **Learn Rate**: The step size used in the optimization algorithm to update the model parameters.
+- **Duration (seconds)**: Time taken for each iteration.
+
+### 4. Evaluating the Model
+
+Evaluation is crucial to understand how well our model generalizes to unseen data.
+
+#### 4.1 Evaluating Model Performance
+
+We use the following SQL command to evaluate the model:
+
+```sql
+SELECT
+  *
+FROM
+  ML.EVALUATE(MODEL `bqml.sample_model`);
+```
+
+This command outputs various evaluation metrics.
+
+![Model Evaluation Output](static/sample-model-evaluation.png)
+
+**Explanation of Evaluation Metrics:**
+
+- **Threshold**: The probability cutoff used to classify a session as positive (transaction) or negative (no transaction).
+- **Precision**: The ratio of true positive predictions to the total predicted positives. It answers the question: "Of all sessions predicted to result in a transaction, how many actually did?"
+- **Recall**: The ratio of true positive predictions to all actual positives. It answers: "Of all sessions that actually resulted in a transaction, how many did we predict correctly?"
+- **Accuracy**: The ratio of correct predictions (both true positives and true negatives) to the total number of predictions.
+- **F1 Score**: The harmonic mean of precision and recall, providing a balance between the two.
+- **Log Loss**: Measures the model's uncertainty in its predictions; lower values indicate better performance.
+- **ROC AUC (Receiver Operating Characteristic Area Under Curve)**: Represents the model's ability to distinguish between classes; a higher value indicates better performance.
+- **Positive Class Threshold**: The probability threshold at which the positive class is predicted.
+
+#### 4.2 Confusion Matrix
+
+A confusion matrix provides a detailed breakdown of the model's predictions.
+
+![Confusion Matrix](static/sample-model-cf-matrix.png)
+
+**Confusion Matrix Terms:**
+
+- **True Positives (TP)**: Correctly predicted positive observations.
+- **False Positives (FP)**: Incorrectly predicted positive observations.
+- **True Negatives (TN)**: Correctly predicted negative observations.
+- **False Negatives (FN)**: Incorrectly predicted negative observations.
+
+**Metrics Derived from the Confusion Matrix:**
+
+- **Precision**: \( \text{Precision} = \frac{TP}{TP + FP} \)
+- **Recall**: \( \text{Recall} = \frac{TP}{TP + FN} \)
+- **Accuracy**: \( \text{Accuracy} = \frac{TP + TN}{TP + TN + FP + FN} \)
+- **F1 Score**: \( \text{F1 Score} = 2 \times \frac{\text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}} \)
+
+#### 4.3 Precision-Recall and ROC Curves
+
+- **Precision-Recall Curve**: Plots precision vs. recall for different thresholds, helping to visualize the trade-off between the two.
+- **ROC Curve**: Plots the true positive rate against the false positive rate at various threshold settings.
+
+These curves assist in selecting the optimal threshold for classifying sessions.
+
+### 5. Making Predictions
+
+With the model trained and evaluated, we can use it to make predictions on new data.
+
+#### 5.1 Preparing the July Data
+
+We extract data from July using the following query:
+
+```sql
+SELECT
+  IF(totals.transactions IS NULL, 0, 1) AS label,
+  IFNULL(device.operatingSystem, "") AS os,
+  device.isMobile AS is_mobile,
+  IFNULL(geoNetwork.country, "") AS country,
+  IFNULL(totals.pageviews, 0) AS pageviews,
+  fullVisitorId
+FROM
+  `bigquery-public-data.google_analytics_sample.ga_sessions_*`
+WHERE
+  _TABLE_SUFFIX BETWEEN '20170701' AND '20170801';
+```
+
+We save this data as `july_data`.
+
+#### 5.2 Predicting Total Purchases by Country
+
+We use the following query to predict total purchases by country:
+
+```sql
+SELECT
+  country,
+  SUM(predicted_label) AS total_predicted_purchases
+FROM
+  ML.PREDICT(MODEL `bqml.sample_model`, (
+    SELECT * FROM `bqml.july_data`))
+GROUP BY country
+ORDER BY total_predicted_purchases DESC
+LIMIT 10;
+```
+
+**Explanation of the Query:**
+
+- **ML.PREDICT**: Applies the trained model to the new data.
+- **SUM(predicted_label)**: Sums up the predicted labels to estimate total purchases per country.
+- **GROUP BY country**: Groups the results by country.
+- **ORDER BY total_predicted_purchases DESC**: Orders the results in descending order of predicted purchases.
+- **LIMIT 10**: Returns the top 10 countries with the highest predicted purchases.
+
+#### 5.3 Predicting Purchases by Visitor ID
+
+Similarly, we predict total purchases by visitor ID:
+
+```sql
+SELECT
+  fullVisitorId,
+  SUM(predicted_label) AS total_predicted_purchases
+FROM
+  ML.PREDICT(MODEL `bqml.sample_model`, (
+    SELECT * FROM `bqml.july_data`))
+GROUP BY fullVisitorId
+ORDER BY total_predicted_purchases DESC
+LIMIT 10;
+```
+
+This helps identify the top visitors likely to make purchases.
