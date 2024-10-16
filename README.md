@@ -463,25 +463,17 @@ A confusion matrix provides a detailed breakdown of the model's predictions.
 **Metrics Derived from the Confusion Matrix:**
 Here’s the corrected Markdown:
 
-- **Precision**:
-
 ```math
 \text{Precision} = \frac{TP}{TP + FP}
 ```
-
-- **Recall**:
 
 ```math
 \text{Recall} = \frac{TP}{TP + FN}
 ```
 
-- **Accuracy**:
-
 ```math
 \text{Accuracy} = \frac{TP + TN}{TP + TN + FP + FN}
 ```
-
-- **F1 Score**:
 
 ```math
 \text{F1 Score} = 2 \times \frac{\text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}}
