@@ -461,11 +461,33 @@ A confusion matrix provides a detailed breakdown of the model's predictions.
 - **False Negatives (FN)**: Incorrectly predicted negative observations.
 
 **Metrics Derived from the Confusion Matrix:**
+Here’s the corrected Markdown:
 
-- **Precision**: \( \text{Precision} = \frac{TP}{TP + FP} \)
-- **Recall**: \( \text{Recall} = \frac{TP}{TP + FN} \)
-- **Accuracy**: \( \text{Accuracy} = \frac{TP + TN}{TP + TN + FP + FN} \)
-- **F1 Score**: \( \text{F1 Score} = 2 \times \frac{\text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}} \)
+- **Precision**:
+
+```math
+\text{Precision} = \frac{TP}{TP + FP}
+```
+
+- **Recall**:
+
+```math
+\text{Recall} = \frac{TP}{TP + FN}
+```
+
+- **Accuracy**:
+
+```math
+\text{Accuracy} = \frac{TP + TN}{TP + TN + FP + FN}
+```
+
+- **F1 Score**:
+
+```math
+\text{F1 Score} = 2 \times \frac{\text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}}
+```
+
+These are formatted correctly for use in Markdown.
 
 #### 4.3 Precision-Recall and ROC Curves
 
