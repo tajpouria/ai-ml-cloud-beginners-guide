@@ -654,3 +654,95 @@ Once the best models are identified, they are assembled to enhance prediction ac
 #### Phase 4: Prediction
 
 In the final phase, the assembled models are prepared for prediction. By leveraging multiple models rather than a single one, AutoML improves prediction accuracy and delivers better results.
+
+## Custom Machine Learning Training Across Cloud Providers
+
+When it comes to custom machine learning training in the cloud, the big players all offer flexible solutions tailored to different needs and levels of expertise. This section will cover how each cloud provider allows you to experiment, create your environment, and build machine learning pipelines, with examples from popular options such as Google Cloud, AWS, and Azure.
+
+### Custom Training Environments
+
+Custom training is a versatile way to build machine learning projects, giving you the freedom to set up your environment according to specific requirements. All major cloud providers offer a variety of options, whether it's leveraging pre-configured environments or building completely custom ones.
+
+For example, on AWS, you can use **SageMaker** to quickly set up pre-built containers for popular ML frameworks like TensorFlow, PyTorch, and Scikit-learn. These containers include all the necessary libraries and dependencies to get started immediately, much like Google Cloud's pre-built containers. Alternatively, AWS also allows you to use Docker to create custom containers for SageMaker, where you can define your own environment, from the choice of framework to custom libraries. This is akin to Google Cloud's option of custom containers.
+
+**Microsoft Azure** also offers similar flexibility. You can use **Azure Machine Learning** to set up environments, choosing between pre-built containers for popular ML frameworks or customizing environments to your exact needs. Azure additionally offers **Compute Instances**, which function like pre-configured Jupyter notebooks to support development, similar to Google Cloud's Vertex AI Workbench. Whether you need a simple, ready-to-go environment or want to customize everything from scratch, Azure provides tools to help.
+
+### Tools to Support Model Training
+
+All cloud providers have their versions of integrated development environments (IDEs) to streamline the ML workflow:
+
+- **Google Cloud**: You have **Vertex AI Workbench**, which is essentially a managed Jupyter notebook. Google also integrated **Colab Enterprise** into the Vertex AI Platform to allow data scientists to code in a familiar environment.
+- **AWS**: Similar to Google Cloud, AWS provides **SageMaker Studio**, a web-based IDE where data scientists can build, train, and deploy models all within a single interface.
+- **Microsoft Azure**: Azure offers **Azure Notebooks** and integration with **VS Code** for a unified development experience, providing a similar end-to-end solution for data scientists.
+
+### Using ML Libraries for Custom Training
+
+All cloud platforms support the use of popular ML libraries, such as **TensorFlow**, **PyTorch**, and **Scikit-learn**. These open-source libraries are universally compatible and enable you to create custom models on any cloud infrastructure.
+
+#### TensorFlow Abstraction Layers
+
+**TensorFlow** is supported on Google Cloud, AWS, and Azure, allowing for flexible ML model development. TensorFlow itself is structured in multiple layers of abstraction:
+
+1. **Hardware**: TensorFlow can be run on different hardware backends like CPUs, GPUs, and TPUs.
+2. **Low-Level APIs**: These allow detailed control over your models, written in C++ or Python
+3. **Model Libraries and High-Level APIs**: Libraries like **tf.keras** allow you to create models at a higher level of abstraction, making it easier to design, train, and deploy ML models without diving into the complex internals.
+
+#### TF.Keras for Building Regression Models
+
+TF.Keras is a high-level neural networks API that is part of TensorFlow. It provides a simplified interface for building, training, and deploying machine learning models. Keras is designed to make it easier for developers to prototype and experiment with neural network architectures, without getting bogged down in the lower-level details of TensorFlow operations. Its user-friendly syntax and flexibility make it a popular choice among data scientists and machine learning practitioners, especially for projects that require rapid iteration and development.
+
+TF.Keras offers several layers of abstraction, from simple sequential models to complex functional APIs that allow for highly customized architectures. Whether you are just starting with machine learning or working on an advanced model, Keras helps make the development process more approachable and intuitive.
+
+Using **tf.keras** for building machine learning models is a straightforward approach that works across all cloud platforms. Let’s look at the general steps to create a simple linear regression model:
+
+1. **Create a Model**: Use **tf.keras.Sequential** to create the model, defining it as a sequence of layers. For example, a basic neural network can be defined with input, hidden, and output layers.
+2. **Compile the Model**: Specify important settings like the **loss function** (to measure how far off predictions are from actual results), the **optimizer** (to minimize the loss function), and **metrics** (to evaluate performance).
+3. **Fit the Model**: Use the training data to fit the model by calling the **fit** method, specifying parameters like training iterations (epochs).
+
+This workflow is identical whether you are running your models on Google Cloud, AWS, or Azure. Each cloud platform provides managed services to train these models in a scalable and optimized way.
+
+##### Example: Building a Simple Linear Regression Model using TF.Keras
+
+Below is a code example for building a simple linear regression model using **TensorFlow Keras**, along with a detailed explanation:
+
+```python
+import tensorflow as tf
+import numpy as np
+
+# Step 1: Generate Sample Data
+# Here, we generate some random data for a simple linear relationship (y = 2x + 1)
+x_train = np.array([1.0, 2.0, 3.0, 4.0, 5.0], dtype=float)
+y_train = np.array([3.0, 5.0, 7.0, 9.0, 11.0], dtype=float)
+
+# Step 2: Create the Model
+# Using Sequential to define the model, we specify a single Dense layer with 1 neuron and input shape of 1
+model = tf.keras.Sequential([
+    tf.keras.layers.Dense(units=1, input_shape=[1])
+])
+
+# Step 3: Compile the Model
+# Here, we specify a mean squared error loss function and the stochastic gradient descent (SGD) optimizer
+model.compile(optimizer='sgd', loss='mean_squared_error')
+
+# Step 4: Fit the Model
+# We fit the model to the training data with 500 epochs (iterations over the data)
+model.fit(x_train, y_train, epochs=500)
+
+# Step 5: Make Predictions
+# After training, use the model to make predictions
+print(model.predict([10.0]))
+```
+
+**Explanation**:
+
+- **Generate Sample Data**: We use synthetic data to simulate a linear relationship, where `y = 2x + 1`.
+- **Create the Model**: We use a **Sequential** model, which is a linear stack of layers. The model consists of a single dense layer with one neuron (`units=1`) and an input shape of one (`input_shape=[1]`). This defines a simple linear relationship.
+- **Compile the Model**: Compiling the model involves specifying a **loss function** and an **optimizer**. The loss function we use here is **mean squared error**, which is commonly used in regression problems. The optimizer is **SGD (Stochastic Gradient Descent)**, which helps in updating the model weights during training.
+- **Fit the Model**: The **fit** function is used to train the model on the provided training data (`x_train`, `y_train`). We run the training process for 500 epochs, meaning the model iterates 500 times over the data to learn the relationship.
+- **Make Predictions**: After training, we use the model to predict an output (`y`) for a given input (`x`). For example, the prediction for `x = 10.0` should ideally be close to `y = 21.0`.
+
+### JAX
+
+JAX is a library for array-oriented numerical computation (à la NumPy), with automatic differentiation and JIT compilation to enable high-performance machine learning research.
+
+JaX is available on platforms like Google Cloud and can be run in custom environments on other cloud platforms. **JAX** is a high-performance numerical computation library that is gaining traction due to its flexibility and ease of use for both research and production ML workloads. It supports automatic differentiation, making it a powerful tool for gradient-based optimization, often crucial in machine learning.
