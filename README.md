@@ -746,3 +746,346 @@ print(model.predict([10.0]))
 JAX is a library for array-oriented numerical computation (à la NumPy), with automatic differentiation and JIT compilation to enable high-performance machine learning research.
 
 JaX is available on platforms like Google Cloud and can be run in custom environments on other cloud platforms. **JAX** is a high-performance numerical computation library that is gaining traction due to its flexibility and ease of use for both research and production ML workloads. It supports automatic differentiation, making it a powerful tool for gradient-based optimization, often crucial in machine learning.
+
+## Entity and Sentiment Analysis with the Google Cloud Natural Language Processing API
+
+Let's explore how to use Google Cloud’s Natural Language API to perform entity extraction and sentiment analysis. This API tool allows developers to extract important elements from text, like entities (people, places, events) and gain insights into the sentiment expressed within the text. Through practical examples, you will see how to create API requests and interpret the results for a deeper understanding of textual data.
+
+### Overview of the Natural Language API
+
+The Google Cloud Natural Language API provides several functionalities:
+
+- **Entity Analysis**: Extracts entities such as people, places, and events from text.
+- **Sentiment Analysis**: Measures the sentiment of the text—whether it is positive, negative, or neutral.
+- **Syntactic Analysis**: Breaks down sentences into linguistic tokens and analyzes their structure.
+- **Multilingual Support**: Supports multiple languages for text analysis.
+
+### Example 1: Entity Analysis
+
+Entity analysis identifies entities like persons, organizations, and locations in a piece of text. Let’s create a simple API request to analyze the following sentence:
+
+_"Tesla, Inc., founded by Elon Musk and several co-founders, is a leading electric vehicle and renewable energy company headquartered in California."_
+
+#### Creating the API Request
+
+2. Request JSON content:
+   ```json
+   {
+     "document": {
+       "type": "PLAIN_TEXT",
+       "content": "Tesla, Inc., founded by Elon Musk and several co-founders, is a leading electric vehicle and renewable energy company headquartered in California."
+     },
+     "encodingType": "UTF8"
+   }
+   ```
+
+#### Sending the API Request
+
+```bash
+curl "https://language.googleapis.com/v1/documents:analyzeEntities?key=${API_KEY}" \
+  -s -X POST -H "Content-Type: application/json" --data-binary @request.json > result.json
+```
+
+#### Interpreting the Response
+
+The API will return a JSON response listing all entities extracted from the text. Here’s an excerpt of what the response might look like:
+
+```json
+{
+  "entities": [
+    {
+      "name": "Tesla, Inc.",
+      "type": "ORGANIZATION",
+      "salience": 0.6,
+      "mentions": [
+        {
+          "text": {
+            "content": "Tesla, Inc.",
+            "beginOffset": 0
+          },
+          "type": "PROPER"
+        }
+      ]
+    },
+    {
+      "name": "Elon Musk",
+      "type": "PERSON",
+      "salience": 0.4,
+      "mentions": [
+        {
+          "text": {
+            "content": "Elon Musk",
+            "beginOffset": 18
+          },
+          "type": "PROPER"
+        }
+      ]
+    }
+  ]
+}
+```
+
+In this response:
+
+- **Entities** such as "Tesla, Inc." and "Elon Musk" are identified.
+- The **salience** score indicates the importance of the entity in the text (from 0 to 1).
+- Mentions include how the entity was referred to in the text.
+
+### Example 2: Sentiment Analysis
+
+Sentiment analysis detects the emotion behind the text, which can be positive, negative, or neutral.
+
+For this example, let's analyze a positive sentence:
+
+_"The new smartphone has an incredible camera and battery life. I highly recommend it to everyone."_
+
+#### Modifying the Request
+
+Update the `request.json` with the following content:
+
+```json
+{
+  "document": {
+    "type": "PLAIN_TEXT",
+    "content": "The new smartphone has an incredible camera and battery life. I highly recommend it to everyone."
+  },
+  "encodingType": "UTF8"
+}
+```
+
+#### Sending the Sentiment Request
+
+Use the following `curl` command to analyze sentiment:
+
+```bash
+curl "https://language.googleapis.com/v1/documents:analyzeSentiment?key=${API_KEY}" \
+  -s -X POST -H "Content-Type: application/json" --data-binary @request.json
+```
+
+#### Interpreting the Sentiment Response
+
+The response will look something like this:
+
+```json
+{
+  "documentSentiment": {
+    "magnitude": 2.1,
+    "score": 0.8
+  },
+  "sentences": [
+    {
+      "text": {
+        "content": "The new smartphone has an incredible camera and battery life.",
+        "beginOffset": 0
+      },
+      "sentiment": {
+        "magnitude": 1.1,
+        "score": 0.8
+      }
+    },
+    {
+      "text": {
+        "content": "I highly recommend it to everyone.",
+        "beginOffset": 53
+      },
+      "sentiment": {
+        "magnitude": 1.0,
+        "score": 0.8
+      }
+    }
+  ]
+}
+```
+
+- The **score** indicates how positive (1.0) or negative (-1.0) the sentiment is.
+- The **magnitude** reflects the overall intensity of emotion in the text, irrespective of being positive or negative.
+
+### Example 3: Analyzing Entity Sentiment
+
+This feature allows you to analyze the sentiment specifically for each entity mentioned in the text.
+
+Consider the following review:
+_"The pizza was delicious, but the service was disappointing."_
+
+#### Creating the Request
+
+Update `request.json`:
+
+```json
+{
+  "document": {
+    "type": "PLAIN_TEXT",
+    "content": "The pizza was delicious, but the service was disappointing."
+  },
+  "encodingType": "UTF8"
+}
+```
+
+#### Sending the Entity Sentiment Request
+
+Use the following command:
+
+```bash
+curl "https://language.googleapis.com/v1/documents:analyzeEntitySentiment?key=${API_KEY}" \
+  -s -X POST -H "Content-Type: application/json" --data-binary @request.json
+```
+
+#### Interpreting the Response
+
+The API will return sentiment information for each entity:
+
+```json
+{
+  "entities": [
+    {
+      "name": "pizza",
+      "type": "CONSUMER_GOOD",
+      "sentiment": {
+        "magnitude": 0.8,
+        "score": 0.8
+      }
+    },
+    {
+      "name": "service",
+      "type": "OTHER",
+      "sentiment": {
+        "magnitude": 1.0,
+        "score": -0.8
+      }
+    }
+  ]
+}
+```
+
+- Here, **pizza** receives a positive sentiment, while **service** is associated with a strong negative sentiment.
+
+### Example 4: Syntactic Analysis
+
+Syntactic analysis helps you break down sentences into tokens and provides part-of-speech tagging for each word. It’s useful for understanding the linguistic structure of text. Let’s explore this by analyzing a simple sentence:
+
+_"John Smith is a talented guitarist, singer, and songwriter."_
+
+#### Creating the Request
+
+Update `request.json` with the following content:
+
+```json
+{
+  "document": {
+    "type": "PLAIN_TEXT",
+    "content": "John Smith is a talented guitarist, singer, and songwriter."
+  },
+  "encodingType": "UTF8"
+}
+```
+
+#### Sending the Syntax Analysis Request
+
+Use this `curl` command to send the request:
+
+```bash
+curl "https://language.googleapis.com/v1/documents:analyzeSyntax?key=${API_KEY}" \
+  -s -X POST -H "Content-Type: application/json" --data-binary @request.json
+```
+
+#### Interpreting the Syntax Response
+
+Here’s a simplified version of what the response might look like for the word "is":
+
+```json
+{
+  "tokens": [
+    {
+      "text": {
+        "content": "is",
+        "beginOffset": 10
+      },
+      "partOfSpeech": {
+        "tag": "VERB",
+        "tense": "PRESENT",
+        "person": "THIRD",
+        "number": "SINGULAR"
+      },
+      "dependencyEdge": {
+        "headTokenIndex": 1,
+        "label": "ROOT"
+      },
+      "lemma": "be"
+    }
+  ]
+}
+```
+
+- **Part-of-Speech Tag**: "is" is tagged as a verb.
+- **Lemma**: The canonical form of the word is “be”.
+- **Dependency Edge**: This helps construct the dependency parse tree, showing that "is" is the root of the sentence.
+
+### Example 5: Multilingual Analysis
+
+The Natural Language API supports multiple languages, and it can automatically detect the language of the text. Let’s analyze a sentence in Spanish:
+
+_"La sede de Google en España se encuentra en Madrid."_
+
+#### Creating the Request
+
+Update `request.json` with the following content:
+
+```json
+{
+  "document": {
+    "type": "PLAIN_TEXT",
+    "content": "La sede de Google en España se encuentra en Madrid."
+  }
+}
+```
+
+#### Sending the Entity Analysis Request
+
+Send the following `curl` command to analyze entities:
+
+```bash
+curl "https://language.googleapis.com/v1/documents:analyzeEntities?key=${API_KEY}" \
+  -s -X POST -H "Content-Type: application/json" --data-binary @request.json
+```
+
+#### Interpreting the Response
+
+Here’s an example of the response:
+
+```json
+{
+  "entities": [
+    {
+      "name": "Google",
+      "type": "ORGANIZATION",
+      "salience": 0.5,
+      "mentions": [
+        {
+          "text": {
+            "content": "Google",
+            "beginOffset": 10
+          }
+        }
+      ]
+    },
+    {
+      "name": "Madrid",
+      "type": "LOCATION",
+      "salience": 0.4,
+      "mentions": [
+        {
+          "text": {
+            "content": "Madrid",
+            "beginOffset": 41
+          }
+        }
+      ]
+    }
+  ],
+  "language": "es"
+}
+```
+
+- **Entities** such as "Google" and "Madrid" are extracted.
+- The **salience** score indicates how central these entities are to the sentence.
+- The language of the text is automatically detected as Spanish.
