@@ -1089,3 +1089,154 @@ Here’s an example of the response:
 - **Entities** such as "Google" and "Madrid" are extracted.
 - The **salience** score indicates how central these entities are to the sentence.
 - The language of the text is automatically detected as Spanish.
+
+## Machine Learning Workflow
+
+A ML workflow typically involves three main stages: data preparation, model development, and model serving
+
+Data Preparation: This is the first stage, where raw data is gathered, organized, and transformed into a suitable format for training. It often involves collecting both structured (such as numerical or text data) and unstructured data (such as images or audio). Data uploading, cleaning, and feature engineering are key steps in this phase, as the quality and quantity of data determine how effectively the model can learn.
+
+Model Development: In this stage, the model is trained using the prepared data. Training is typically an iterative process where the model learns by adjusting its parameters to minimize errors. This stage also involves evaluating the model's performance and making adjustments to improve its accuracy. Training and evaluation often form a cycle, continuously refining the model until it achieves the desired performance.
+
+Model Serving: Once the model has been trained, it must be deployed to make predictions in real-world scenarios. This phase includes deploying the model, integrating it into applications, and monitoring its performance to ensure it delivers reliable results. Effective monitoring is important to detect issues like data drift, where changes in the input data over time can impact the model's accuracy, requiring further adjustments.
+
+## Data Preparation
+
+In ML, the adage "garbage in, garbage out" underscores the importance of high-quality data. Data preparation is the foundational stage of any ML workflow, ensuring that the data you use is clean, relevant, and appropriately structured for model training. Without data preparation, even the most sophisticated algorithms can yield misleading or suboptimal results.
+
+This process involves several critical steps—from data collection to feature engineering—transforming raw data into a form that a machine learning model can understand and learn from effectively.
+
+## Data Collection and Sources
+
+**Data collection** is the initial step in the data preparation process. Data can originate from various sources, each with its own format and structure. Common data sources include:
+
+- **Cloud Storage**: Platforms like Google Cloud Storage store large datasets in a scalable and secure environment.
+- **Databases**: Structured data stored in databases such as BigQuery can be queried and retrieved efficiently.
+- **Local Files**: Data stored locally can be uploaded for processing.
+- **APIs and Web Services**: Real-time data can be fetched using APIs, crucial for applications needing current information.
+
+## Data Types and Their Unique Challenges
+
+Different types of data require specific preparation techniques and are used to solve varied ML tasks. AutoML supports multiple data types, including image, tabular, text, and video data, each presenting unique requirements and objectives.
+
+### Image Data
+
+Image data is used in computer vision tasks, and its preparation involves handling various challenges such as different image formats, resolutions, and color spaces.
+
+- **Classification Tasks**:
+
+  - **Single-Label Classification**: Assigning one label to each image (e.g., 'cat' or 'dog').
+  - **Multi-Label Classification**: Assigning multiple labels to an image (e.g., 'dog', 'brown', 'large').
+
+- **Object Detection**: Identifying and localizing objects within an image.
+
+- **Image Segmentation**: Partitioning an image into segments to identify objects or boundaries.
+
+### Tabular Data
+
+Tabular data is structured data organized in rows and columns, often used in traditional ML tasks.
+
+- **Regression**: Predicting continuous values (e.g., predicting house prices).
+- **Classification**: Categorizing data into discrete classes (e.g., spam detection).
+- **Forecasting**: Predicting future data points (e.g., demand forecasting in retail).
+
+### Text Data
+
+Text data involves natural language processing (NLP) tasks.
+
+- **Text Classification**: Assigning categories to text (e.g., topic classification).
+- **Entity Extraction**: Identifying and classifying key elements from text (e.g., names, dates).
+- **Sentiment Analysis**: Determining the sentiment expressed in text (e.g., positive, negative).
+
+### Video Data
+
+Video data is used in advanced computer vision tasks.
+
+- **Video Action Recognition**: Identifying actions in videos.
+- **Video Classification**: Categorizing videos based on content.
+- **Object Tracking**: Following objects across frames in a video.
+
+## Multi-Modal Data Integration
+
+In practice, addressing complex business problems often requires combining multiple data types.
+
+- **Example**: A retail company might use tabular sales data, customer reviews (text), and product images to improve their recommendation system.
+
+**AutoML** facilitates this integration, enabling a more holistic approach to building robust models.
+
+## Feature Engineering
+
+After data collection, feature engineering becomes a critical step.
+
+### What is a Feature?
+
+A feature is an individual measurable property or characteristic of the data used as input for a machine learning model. By providing relevant features, we enable the model to learn patterns and relationships within the data, thereby enhancing its ability to make accurate predictions or classifications.
+
+### What is Feature Engineering?
+
+Feature engineering is the process of transforming raw data into meaningful features that better represent the underlying problem to the predictive models, resulting in improved model accuracy.
+
+### Key Steps in Feature Engineering
+
+1. **Data Cleaning**:
+
+   - **Handling Missing Values**: Techniques include mean/mode imputation(filling in missing values with the average (for numerical data) or most frequent value (for categorical data) of that feature), interpolation, or using models to predict missing values.
+   - **Outlier Detection**: Identifying and handling anomalies that can skew the model.
+
+2. **Feature Creation**:
+
+   - **Feature Extraction**: Deriving new features from existing data (e.g., extracting day of the week from a date).
+   - **Feature Transformation**: Applying mathematical transformations (e.g., logarithmic scaling to handle skewed data).
+   - **Encoding Categorical Variables**:
+     - **One-Hot Encoding**: Converting categorical variables into binary vectors.
+     - **Label Encoding**: Assigning an integer value to each category.
+
+3. **Feature Selection**:
+   - **Dimensionality Reduction**: Techniques like Principal Component Analysis (PCA) to reduce the number of features.
+   - **Feature Importance**: Using algorithms to identify which features contribute most to the prediction.
+
+## Vertex AI Feature Store
+
+Feature engineering can be challenging and time-consuming, especially when scaling up for large projects. Vertex AI provides a specialized tool called **Vertex AI Feature Store** to streamline this process.
+
+### What is a Feature Store?
+
+A feature store is a centralized repository that:
+
+- **Manages Features**: Stores features consistently for training and serving.
+- **Serves Features**: Provides features in real-time (online) or batch (offline) modes.
+- **Shares Features**: Allows features to be reused across different models and projects, promoting consistency.
+
+### Advantages of Using Feature Store
+
+- **Consistency**: Ensures the same feature definitions are used during training and serving.
+- **Efficiency**: Reduces duplication by reusing features.
+- **Scalability**: Handles large volumes of data with low latency.
+
+## Online vs. Offline Feature Serving
+
+### Online Feature Serving
+
+- **Purpose**: Provides feature values in real-time for models during prediction.
+- **Use Cases**:
+  - **Recommendation Engines**: Quick product suggestions based on user interactions.
+  - **Fraud Detection**: Immediate analysis of transactions for potential fraud.
+  - **Personalized Advertisements**: Real-time ad targeting based on user behavior.
+
+#### Challenges
+
+- **Low Latency Requirements**: Systems must deliver features in milliseconds.
+- **Data Freshness**: Features must reflect the most current data.
+
+### Offline Feature Serving
+
+- **Purpose**: Serves features in batch mode for training models or batch inference tasks.
+- **Use Cases**:
+  - **Model Training**: Periodic retrieval of features for retraining models.
+  - **Batch Inference**: Processing large datasets overnight for predictions.
+  - **Data Aggregation for Reporting**: Compiling historical data for analysis.
+
+#### Advantages
+
+- **Efficiency**: Processes large volumes without the need for real-time responses.
+- **Resource Optimization**: Utilizes computational resources during off-peak hours.
