@@ -1517,3 +1517,103 @@ For example, setting the threshold to zero results in **100% recall** but **50% 
 On the other extreme, setting the threshold to one results in **100% precision** but only **1% recall**. This means the model only predicts a very small number of people to be good borrowers, and it is correct every time, but most good borrowers are rejected, which would lead to a significant business loss.
 
 The key takeaway here is that selecting an appropriate confidence threshold is critical for balancing precision and recall to suit the specific objectives of the model.
+
+## How Neural Networks Learn
+
+The process of learning within neural networks is central to machine learning itself, and it involves key fundamental concepts that you will encounter repeatedly. In this section, we'll delve deeply into how an artificial neural network (ANN) learns and the critical components that drive this process.
+
+### What is an Artificial Neural Network (ANN)?
+
+An Artificial Neural Network (ANN) is a computational model inspired by the structure and function of the human brain. ANNs are composed of layers of interconnected nodes, also called neurons. The three main types of layers in an ANN are:
+
+1. **Input Layer**: This is where the network receives information. Each node in this layer represents an input feature.
+2. **Hidden Layer(s)**: These layers process inputs, transforming them in ways that reveal hidden patterns. The hidden layers contain the neurons that perform computations and detect patterns.
+3. **Output Layer**: This layer provides the final output or prediction, representing the result of the computations.
+
+The interconnected lines between neurons are akin to synapses in the human brain, and these connections are where the "learning" takes place.
+
+### The Learning Process of a Neural Network
+
+At the core of a neural network's learning process are **weights**, which determine the strength of connections between nodes. These weights are adjusted during training in order to minimize the error between the predicted output and the actual target values. Let’s take a closer look at how an ANN learns.
+
+1. **Weighted Sum Calculation**:
+
+   Each input value is multiplied by its corresponding weight, and these weighted inputs are then summed. In many neural networks, a bias value is added to this weighted sum. The bias helps shift the output function and adds flexibility to the model.
+
+2. **Activation Function**:
+
+   After calculating the weighted sum, the result is passed through an **activation function**. An activation function introduces non-linearity, enabling the network to learn complex patterns. Without activation functions, a neural network would only be capable of performing linear transformations, limiting its ability to solve real-world problems.
+
+   Commonly used activation functions include:
+
+   - **ReLU (Rectified Linear Unit)**: Outputs zero for negative values and retains positive values, allowing the network to learn effectively.
+
+     ```math
+     f(z) = \max(0, z)
+     ```
+
+   - **Sigmoid**: Maps input values to a range between 0 and 1, useful for binary classification tasks.
+
+     ```math
+     f(z) = \frac{1}{1 + e^{-z}}
+     ```
+
+   - **Tanh (Hyperbolic Tangent)**: Maps input values to a range between -1 and 1, giving a more centered output.
+
+     ```math
+     f(z) = \text{tanh}(z) = \frac{e^z - e^{-z}}{e^z + e^{-z}}
+     ```
+
+   - **Softmax**: Used in multi-class classification problems, Softmax maps outputs to a range [0, 1] in such a way that the sum of all outputs equals 1, producing a probability distribution.
+
+     ```math
+     \text{Softmax}(z_i) = \frac{e^{z_i}}{\sum_{j=1}^{n} e^{z_j}}
+     ```
+
+3. **Forward Propagation**:
+
+   The **forward propagation** process takes the input, passes it through the network, layer by layer, applying weights, calculating the weighted sum, and passing it through activation functions, until it reaches the output layer, which produces the prediction.
+
+4. **Loss Function**:
+
+   Once the network makes a prediction, we need to determine how "good" the prediction is compared to the actual target value. This is where the **loss function** comes in. The loss function quantifies the difference between predicted and actual values. For instance:
+
+   - **Mean Squared Error (MSE)**: Used in regression problems, it calculates the average squared difference between predicted and actual values.
+
+     ```math
+     L = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2
+     ```
+
+   - **Cross-Entropy Loss**: Used for classification problems to measure the difference between predicted and true probability distributions.
+
+     ```math
+     L = -\sum_{i=1}^{n} y_i \log(\hat{y}_i)
+     ```
+
+5. **Backpropagation**:
+
+   If the loss function indicates a significant difference, the network must adjust the weights to improve its prediction accuracy. This is achieved through **backpropagation**. Backpropagation works by calculating the gradient of the loss function with respect to each weight using a method called **gradient descent**.
+
+6. **Gradient Descent**:
+
+   **Gradient descent** is the optimization technique used to minimize the loss function by iteratively adjusting the weights. Essentially, gradient descent helps find the optimal weights by determining the direction in which the loss function decreases most steeply and adjusting weights accordingly. The **learning rate** is a hyperparameter that determines the step size during this adjustment.
+
+   Choosing the right learning rate is crucial:
+
+   - If the learning rate is too large, the network may overshoot the optimal solution and fail to converge.
+   - If it is too small, the network will converge slowly, making the training process inefficient.
+
+7. **Iteration and Convergence**:
+
+   The process of forward propagation, loss calculation, backpropagation, and weight adjustment is repeated multiple times, and each complete cycle is known as an **epoch**. The goal is to minimize the loss function until it reaches a value that indicates an optimal solution, meaning further iterations no longer yield improvements.
+
+### Hyperparameters vs. Parameters
+
+- **Parameters**: These are the values that the neural network learns during training, such as weights and biases. Parameters are adjusted to minimize the loss function and improve prediction accuracy.
+- **Hyperparameters**: These are values set before training begins and are used to control the learning process. Examples include the number of hidden layers, the number of neurons per layer, the learning rate, and the number of epochs. Hyperparameter tuning is an essential part of optimizing neural network performance.
+
+### Bringing It All Together
+
+The process of training a neural network is akin to a human learning from experience. The neural network learns by adjusting its internal parameters, just as a person might adjust their understanding of a concept based on new experiences. Through iterative learning, errors are minimized, and predictions improve.
+
+A neural network starts with a guess, adjusts itself based on the difference between the guess and reality, and continuously improves through trial and error. This step-by-step learning process allows neural networks to tackle a variety of problems, from image recognition to natural language processing.
