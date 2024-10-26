@@ -1350,3 +1350,83 @@ Key components of effective model monitoring include:
 - **Automated Alerts**: Setting thresholds that, when exceeded, trigger alerts for data scientists to investigate potential issues with the model.
 
 Model monitoring ensures that the system remains resilient and responsive. In production environments, a well-monitored model provides value consistently, but when issues do arise, rapid detection and resolution prevent potential business impacts.
+
+## MLOps and Workflow Automation&#x20;
+
+&#x20;To create a seamless and sustainable end-to-end machine learning workflow, it's not enough to develop a model and stop there. We need systems in place to ensure that the entire machine learning lifecycle—from data preparation to model deployment—is well integrated, repeatable, and continuously improving. This is where **MLOps** (Machine Learning Operations) plays a significant role.
+
+### Building an End-to-End Workflow
+
+Previously, we discussed the three main stages of building an ML model:
+
+1. **Data Preparation**: Collecting, cleaning, and preparing data.
+2. **Model Development**: Training, tuning, and evaluating the model.
+3. **Model Serving**: Deploying the model and making it available for inference.
+
+You have two options to build an end-to-end workflow for these stages:
+
+1. **Codeless Approach**: Use tools like **AutoML on Vertex AI** through Google Cloud Console, which is suitable for rapid prototyping and manual workflows.
+2. **Automated Approach**: Code a pipeline that automates each stage, achieving **continuous integration (CI)**, **continuous training (CT)**, and **continuous delivery (CD)**.
+
+This second approach is essential for organizations that want to operationalize machine learning models effectively, minimizing manual interventions and enhancing the robustness of model deployments.
+
+### What is MLOps?
+
+**MLOps** combines machine learning model development with software engineering operations, borrowing principles from **DevOps** to apply them to machine learning. DevOps focuses on streamlining software development through automation, version control, and continuous deployment. Similarly, MLOps brings automation and integration to machine learning, tackling production challenges and ensuring models operate effectively in real-world environments.
+
+The **core aim of MLOps** is to solve the biggest pain points in the ML production pipeline—including managing model drift, versioning, scalability, and dealing with constantly evolving data and code. It ensures that the ML system is well monitored, well maintained, and continuously improving.
+
+Practicing MLOps means automating and monitoring each step of the ML system's lifecycle, thus enabling **continuous integration**, **training**, and **delivery** (CI/CT/CD).
+
+For Example on Google Cloud's **Vertex AI**, this is achieved through **Vertex AI Pipelines**, which can leverage tools like **Kubeflow Pipelines (KFP)** and **TensorFlow Extended (TFX)**.
+
+- **TFX** is a natural fit if you already use TensorFlow for building ML models that process structured data.
+- **Kubeflow Pipelines (KFP)** is a good alternative for more general use cases that may require different frameworks.
+
+### Building ML Pipelines
+
+An ML pipeline is a sequence of processes, each of which contributes to building, training, evaluating, or serving an ML model. These processes can run in two environments:
+
+1. **Development Environment**: Used for experimentation, data preparation, and model training.
+2. **Production Environment**: Where the model is deployed, and its predictions and performance are monitored.
+
+Each stage of this workflow can be represented as a **pipeline component**. A component is a modular, self-contained set of code that performs a specific task—such as data transformation, model training, or evaluation. Components are analogous to functions in programming: **building blocks** that can be reused, connected, and automated within the larger workflow.
+
+#### Components of a Pipeline
+
+- **Custom Components**: If you need specialized behavior, such as implementing a unique evaluation metric, you can build custom components that cater to your requirements.
+- **Pre-Built Components**: Google provides numerous pre-built components, allowing developers to avoid reinventing the wheel. For example, you might use a pre-built component to create a tabular dataset from **BigQuery** or **Cloud Storage**.
+
+Each component should ideally follow the **single responsibility principle** to promote reusability and maintainability. By assembling these components, you can create automated pipelines that ensure consistency and reliability across ML projects.
+
+#### The Phases of ML Automation
+
+Organizations often implement ML automation in three distinct phases:
+
+1. **Phase Zero**: The starting point, where ML models are manually developed and deployed through tools like **AutoML**. This phase is crucial for building an end-to-end workflow manually and understanding the key elements involved.
+2. **Phase One**: Automation begins with the creation of individual components for different steps of the ML lifecycle, such as data preparation or model training, using the **Vertex AI Pipelines SDK**.
+3. **Phase Two**: Full integration of components to form a comprehensive automated workflow, achieving **CI**, **CT**, and **CD**.
+
+### Example: Automating an ML Workflow on Google Cloud's Vertex AI
+
+Let's consider an example where you want to build an ML pipeline to classify beans into one of seven types based on their characteristics. This is how you can achieve this automation on Google Cloud's Vertex AI:
+
+1. **Build the Pipeline**:
+
+   - Plan the pipeline as a series of components, combining custom and pre-built modules.
+   - Develop custom components as needed—for instance, creating a component called `classification_model_eval_metrics` to evaluate the model's performance against a predefined threshold.
+   - Add pre-built components like:
+     - `TabularDatasetCreateOp`: Creates a dataset in Vertex AI.
+     - `AutoMLTabularTrainingJobRunOp`: Kicks off an AutoML training job.
+     - `EndpointCreateOp` and `ModelDeployOp`: Create an endpoint and deploy the model to Vertex AI.
+
+2. **Compile and Run the Pipeline**:
+
+   - Compile the pipeline using the `compiler.Compiler()` command.
+   - Define the job and run the pipeline.
+
+3. **Continuous Monitoring**:
+
+   - The pipeline will evaluate the model's performance periodically and determine whether retraining or redeployment is necessary, reducing the need for manual interventions.
+
+The **visual interface** provided by Google Cloud allows you to track each step and component in the pipeline, as well as the corresponding artifacts.
