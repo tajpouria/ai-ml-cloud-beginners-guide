@@ -1430,3 +1430,90 @@ Let's consider an example where you want to build an ML pipeline to classify bea
    - The pipeline will evaluate the model's performance periodically and determine whether retraining or redeployment is necessary, reducing the need for manual interventions.
 
 The **visual interface** provided by Google Cloud allows you to track each step and component in the pipeline, as well as the corresponding artifacts.
+
+Here's the corrected markdown document with math formulas displayed properly:
+
+## Building a Machine Learning Model: Evaluating Loan Risk
+
+Let’s dive into the practical application of ML by building a model to predict loan risk. The goal is to walk through the key phases of the machine learning workflow: data preparation, model development, and model evaluation, with a particular focus on understanding fundamental concepts that are essential for interpreting model performance. To make these concepts clear, we will use a real-world example related to predicting loan repayment behavior.
+
+### Phases of Machine Learning Workflow
+
+The process of building a machine learning model typically involves three major phases:
+
+1. **Data Preparation**: The dataset is the foundation of any machine learning model. In our case, we have a dataset containing information on loans issued by a financial institution, consisting of 2,000 data points. Proper data preparation involves cleaning the data, handling missing values, and transforming the data into a form that is suitable for training a machine learning model.
+
+2. **Model Development**: After preparing the data, we move on to model development. Here, the machine learning algorithm learns patterns in the data to predict outcomes. The goal is to train the model to effectively distinguish between different scenarios, in our case, between borrowers who will repay and those who will default.
+
+3. **Model Evaluation**: Once the model is trained, it is critical to evaluate its performance to determine how well it makes predictions. Evaluation helps ensure that the model is accurate and reliable, especially when it is applied to real-world scenarios.
+
+### Model Evaluation Metrics
+
+One of the most fundamental tools for evaluating a model's performance is the **confusion matrix**. The confusion matrix provides insight into the types of errors the model is making, and it allows us to calculate various metrics that are crucial for understanding the model's performance.
+
+#### The Confusion Matrix
+
+The confusion matrix is a table that describes the performance of a classification model by showing the actual versus predicted values. It includes the following terms:
+
+- **True Positives (TP)**: Instances correctly identified as positive.
+- **True Negatives (TN)**: Instances correctly identified as negative.
+- **False Positives (FP)**: Instances incorrectly identified as positive (also known as "Type I Error").
+- **False Negatives (FN)**: Instances incorrectly identified as negative (also known as "Type II Error").
+
+Using this matrix, we derive several metrics to evaluate the model's performance:
+
+1. **True Positive Rate (TPR)**: Also known as **recall** or **sensitivity**, it is calculated as:
+
+```math
+\text{TPR} = \frac{\text{TP}}{\text{TP} + \text{FN}}
+```
+
+This metric indicates how effectively the model identifies positive cases. In our example, a TPR of 100% means the model perfectly identifies every borrower who will repay their loan.
+
+2. **True Negative Rate (TNR)**: Also called **specificity**, it is calculated as:
+
+```math
+\text{TNR} = \frac{\text{TN}}{\text{TN} + \text{FP}}
+```
+
+This metric indicates how effectively the model identifies negative cases (borrowers who will default). A TNR of 87% means the model correctly identifies 87% of defaulters.
+
+3. **False Positive Rate (FPR)**: This is the percentage of negative instances that were incorrectly classified as positive:
+
+```math
+\text{FPR} = \frac{\text{FP}}{\text{FP} + \text{TN}}
+```
+
+In our example, an FPR of 13% means that 13% of borrowers who would have repaid their loan were incorrectly classified as defaulters. This can result in rejecting good customers, which is undesirable.
+
+4. **False Negative Rate (FNR)**: This metric shows the percentage of positive instances incorrectly classified as negative:
+
+```math
+\text{FNR} = \frac{\text{FN}}{\text{FN} + \text{TP}}
+```
+
+A 0% FNR means the model never incorrectly identifies a borrower who will repay as a defaulter, which is ideal.
+
+### Precision and Recall Trade-off
+
+Another important concept in evaluating model performance is the **precision-recall trade-off**. Precision and recall are influenced by the **confidence threshold**, which determines how certain the model must be before classifying a case as positive.
+
+- **Precision** measures how many of the predicted positive cases are actually positive:
+
+```math
+\text{Precision} = \frac{\text{TP}}{\text{TP} + \text{FP}}
+```
+
+- **Recall** (or **True Positive Rate**) measures how many of the actual positive cases are correctly predicted by the model, as calculated earlier.
+
+Adjusting the confidence threshold affects both metrics:
+
+- **Higher Threshold**: Increasing the threshold will reduce the number of false positives, thereby increasing precision. However, this may also lower recall because some positive cases may be missed.
+
+- **Lower Threshold**: Decreasing the threshold will increase recall, as more positive cases are predicted, but precision may decrease as more false positives are introduced.
+
+For example, setting the threshold to zero results in **100% recall** but **50% precision**. This means the model predicts that everyone will repay the loan, but only half actually do. Such a scenario can be risky for the financial institution since it leads to many bad loans.
+
+On the other extreme, setting the threshold to one results in **100% precision** but only **1% recall**. This means the model only predicts a very small number of people to be good borrowers, and it is correct every time, but most good borrowers are rejected, which would lead to a significant business loss.
+
+The key takeaway here is that selecting an appropriate confidence threshold is critical for balancing precision and recall to suit the specific objectives of the model.
