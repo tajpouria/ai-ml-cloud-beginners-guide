@@ -1617,3 +1617,118 @@ At the core of a neural network's learning process are **weights**, which determ
 The process of training a neural network is akin to a human learning from experience. The neural network learns by adjusting its internal parameters, just as a person might adjust their understanding of a concept based on new experiences. Through iterative learning, errors are minimized, and predictions improve.
 
 A neural network starts with a guess, adjusts itself based on the difference between the guess and reality, and continuously improves through trial and error. This step-by-step learning process allows neural networks to tackle a variety of problems, from image recognition to natural language processing.
+
+## Introduction to Generative AI: Concepts and Practical Use on Google Cloud
+
+To begin, it is important to understand what **Generative AI (Gen AI)** entails, how it functions.
+
+Imagine you are a marketing manager spending hours creating compelling content and distributing it through multiple channels. Or perhaps you are a data scientist writing complex SQL queries on vast datasets. Maybe you're an app developer working on a chatbot for a specialized industry like healthcare. **Generative AI** is your new versatile companion for all of these scenarios, fundamentally changing the way we interact with technology.
+
+### What is Generative AI?
+
+Generative AI is a type of artificial intelligence that generates content for you. But what kind of content? Generative AI can produce **multi-modal content**: text, code, images, speech, video, and even 3D models. This means that, given a prompt, generative AI can help with a variety of tasks, such as launching marketing campaigns, generating code, building chatbots, extracting information, summarizing documents, and providing virtual assistance.
+
+### How Does Generative AI Work?
+
+Generative AI learns from a massive amount of **existing content**—such as text, images, and videos—to generate new content. This learning process is known as **training**, which produces what is called a **foundation model**. Foundation models are usually **large models**, characterized by a significant number of parameters, a massive dataset, and substantial computational power requirements.
+
+#### Foundation Models: A Core Component of Gen AI
+
+Foundation models are pivotal in generative AI systems, providing the base from which specialized models can be created. Google, for instance, has a strong history of innovation in this area. Starting with the introduction of **Transformers** in 2017, which laid the foundation for modern Gen AI applications, Google continued innovating with **Gemini** in 2023. Gemini brings in the concept of **artificial general intelligence (AGI)** with its capability to handle multiple types of inputs and outputs, making it an excellent candidate for multimodal tasks.
+
+**Key Foundation Models by Google**:
+
+1. **Gemini**: A multimodal processing model capable of understanding and generating various types of data such as text, images, and more.
+2. **Gemma**: A lightweight, open model for natural language generation.
+3. **Codey**: Specialized in code generation.
+4. **Imagen**: Focused on image generation.
+
+### Pre-trained vs. Fine-tuned Models
+
+Foundation models can be used directly for general purposes or be **further trained** on specific data to solve niche problems. This process involves two stages:
+
+1. **Pre-training**: A model is trained on large datasets to learn general patterns. This is akin to teaching a dog basic commands like "sit" or "stay," which are applicable in general situations.
+2. **Fine-tuning**: After pre-training, the model can be adapted to specific needs. Using the analogy of a dog, this is where you teach specialized skills for unique roles—like a police dog or guide dog. Similarly, a foundation model can be fine-tuned to generate precise content, such as financial models or healthcare advice, using a much smaller dataset focused on that particular field.
+
+For example, **Large Language Models (LLMs)** are typically pre-trained on vast amounts of text data to solve common language problems, such as text classification, summarization, question answering, and content generation across industries. However, to specialize in sectors like retail or finance, LLMs undergo fine-tuning with datasets specific to those domains.
+
+### Opportunities with Generative AI
+
+Powered by foundation models, generative AI is opening up new opportunities to enhance productivity, reduce operational costs, and create value across different industries. Imagine using generative AI to automate a marketing campaign, generate customer insights, or even optimize logistical routes—like we saw with the "Coffee on Wheels" case study from Module 1.
+
+### Creating a Generative AI Project on Google Cloud
+
+You can access and leverage these generative models using **Google Cloud's Vertex AI**, an end-to-end AI development platform supporting both **predictive AI** and **generative AI**. Vertex AI offers tools for tuning your models and developing generative projects, such as **Vertex AI Studio** and **Model Garden**.
+
+#### The Generative AI Workflow on Google Cloud
+
+The workflow of creating a generative AI project on Google Cloud typically follows these steps:
+
+1. **Input Prompt**: Begin by providing a natural language prompt through the Vertex AI Studio UI.
+2. **Responsible AI and Safety Measures**: The prompt undergoes responsible AI checks to ensure the content adheres to safety standards.
+3. **Foundation Models**: The screened prompt is passed to a suitable foundation model, such as Gemini for multimodal processing.
+4. **Model Customization**: If needed, the model can be further customized to fit your specific data and use cases.
+5. **Results Grounding**: The output can undergo grounding and citation checks to minimize hallucinations.
+6. **Final Response**: The response is delivered, with another layer of responsible AI and safety measures applied before displaying it.
+
+## Introduction to Gemini Multimodal and Vertex AI Studio
+
+In recent years, foundation models have become central to advancing artificial intelligence. One of the latest additions to this growing landscape is Gemini Multimodal, developed by Google. This model represents a leap forward in AI capabilities, being trained to process and generate content across multiple modalities, such as text, images, and videos.
+
+### Understanding Multimodal Models
+
+A multimodal model is a type of foundation model designed to process and interpret information from various types of input, or "modalities." These modalities include text, images, videos, and audio. Multimodal models have the ability not only to understand information from different input sources but also to generate responses in multiple forms. For instance, a multimodal model like Gemini can analyze an image and generate descriptive text or even produce relevant contextual information related to that image.
+
+The integration of various modalities enables a seamless exchange of information across forms of media, allowing these models to perform tasks that require a comprehensive understanding of both visual and linguistic contexts. By being able to cross these modality boundaries, multimodal models open up new opportunities for practical applications, such as enhanced content creation, more intuitive human-computer interactions, and advanced automation in data analysis.
+
+### Gemini Multimodal: Capabilities and Applications
+
+Gemini is a multimodal foundation model that excels in processing and integrating information from different media types. Its versatility allows it to cater to a diverse range of use cases, each highlighting a fundamental capability of multimodal AI:
+
+#### 1. **Description and Captioning**
+
+One of Gemini's key strengths lies in its ability to identify and describe objects in images and videos. This can be leveraged for tasks such as automated caption generation or creating visually descriptive content. By processing visual information, Gemini can generate detailed or succinct descriptions, making it useful in applications ranging from social media content creation to accessibility tools for visually impaired users.
+
+#### 2. **Information Extraction and Analysis**
+
+Gemini is adept at extracting and analyzing information from visual inputs. This includes reading text embedded in images or videos, identifying critical elements like numbers on receipts, or even analyzing complex visual scenarios based on a given prompt. For example, Gemini can be used to process invoices or receipts, extract expenses, and classify them accordingly. This capability allows for streamlining workflows that rely on document digitization and analysis, such as in finance or logistics.
+
+#### 3. **Information Seeking**
+
+In addition to identifying and analyzing content, Gemini can also answer questions or conduct information searches based on multimodal inputs. By extracting meaning from both text and visual content, Gemini can respond to complex queries that require understanding the relationship between these different inputs. This is particularly useful for customer support, where responses may need to incorporate and reference visual content provided by users.
+
+#### 4. **Content Creation**
+
+Another area where Gemini demonstrates remarkable potential is content creation. The model can utilize visual and textual inspiration to generate creative pieces, such as stories or advertisements. This feature is particularly appealing for creative industries, where AI can aid in the ideation and drafting of content by providing diverse and imaginative perspectives based on simple prompts or visual cues.
+
+#### 5. **Data Conversion**
+
+Gemini also offers capabilities for data conversion, such as transforming text responses into structured formats like HTML or JSON. This feature is beneficial for developers who need to automate workflows that involve data processing and transformation, particularly in scenarios where consistency and automation are crucial.
+
+### Interacting with Gemini Through Vertex AI Studio
+
+Vertex AI Studio is a cloud-based platform that simplifies the interaction with foundational models like Gemini. It offers various ways for developers to engage with Gemini and utilize its multimodal capabilities. Whether you are a developer exploring the model or looking to incorporate it into production, Vertex AI Studio provides different access methods to suit your needs:
+
+#### 1. **User Interface (UI)**
+
+The Google Cloud Console offers a no-code solution for exploring and testing the capabilities of Gemini. This interface allows developers and users to experiment with prompts, get a feel for the model's responses, and adjust settings easily without writing any code. The no-code approach lowers the barrier to entry, making it accessible to anyone interested in AI-driven insights.
+
+#### 2. **SDKs and Notebooks**
+
+Vertex AI also provides predefined software development kits (SDKs) in languages such as Python and Java, which can be used in environments like Colab or Workbench. These SDKs make it possible to implement more complex interactions with Gemini, customize prompts, and integrate the model into larger systems.
+
+#### 3. **APIs and Command-Line Tools**
+
+For more experienced developers, Gemini APIs can be used in conjunction with command-line tools like Curl to interact with the model programmatically. This approach is ideal for incorporating Gemini's capabilities into custom-built applications and production environments.
+
+### The Art of Prompt Design
+
+A key aspect of effectively using generative models like Gemini is mastering prompt design. A "prompt" is essentially a natural language request that you give to the model in order to receive a specific type of response. Prompt design is a fundamental skill that involves understanding how to frame questions or requests in a way that maximizes the utility of the model's response.
+
+Prompts can consist of various components, such as:
+
+- **Input**: The core request that specifies what you want the model to do (e.g., a question, a task, or a piece of text that needs completion).
+- **Context**: Optional information that guides the model's behavior, which could include specific instructions or background information.
+- **Examples**: Input-output pairs that illustrate the desired response format, helping the model understand what type of answer you expect.
+
+Effective prompt design is crucial for obtaining accurate, useful, and contextually relevant responses from the model. It often involves experimentation to find the right phrasing and structure that elicits the most effective outcome. As you gain more experience with using prompts, you will better understand how to craft them to achieve your desired goals.
